@@ -1,0 +1,22 @@
+.title{
+    display: flex;
+    margin: 0;
+    padding: 0;
+    margin-left: 4em;
+    margin-right: 4em;
+    align-items: center;
+    justify-content: space-between;
+    .button{
+        margin-left: 1em;
+    }
+}
+
+.products{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5em;
+    margin-left: 4em;
+    // justify-content: space-around;
+    // align-items: center;
+
+}
