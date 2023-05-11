@@ -8,7 +8,7 @@ import './index.scss';
 const handleClick = (e, checked, setChecked, data, setData, navigate) => {
   e.preventDefault();
   
-  axios.post('http://localhost/api/delete.php', checked).then(() => {
+  axios.post('https://boy-meets-girl-conj.000webhostapp.com/api/delete.php', checked).then(() => {
     const newData = data.filter(product => !checked.includes(product.id));
     setData(newData);
     setChecked([]);
