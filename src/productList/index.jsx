@@ -5,7 +5,7 @@ import axios from 'axios';
 import './index.scss';
 
 // delete checked boxes
-const handleClick = (e, checked, setChecked, data, setData, useNavigate) => {
+const handleClick = (e, checked, setChecked, data, setData, navigate) => {
   e.preventDefault();
   
   axios.post('http://localhost/api/delete.php', checked).then(() => {
@@ -15,7 +15,7 @@ const handleClick = (e, checked, setChecked, data, setData, useNavigate) => {
   }).catch(error => {
     console.log(error);
   });
-  useNavigate('/');
+  navigate('/');
 };
 
 
@@ -38,7 +38,7 @@ const ProductList = () => {
         <h2>Product List</h2>
         <div className='buttons'>
           <button className='button' onClick={routeChange}>ADD</button>
-          <button className='button' onClick={e => handleClick(e, checked, setChecked, data, setData, useNavigate)}>MASS DELETE</button>
+          <button className='button' onClick={e => handleClick(e, checked, setChecked, data, setData, navigate)}>MASS DELETE</button>
         </div>
       </div>
       <div className='products'>
