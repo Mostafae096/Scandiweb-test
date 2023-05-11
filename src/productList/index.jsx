@@ -4,45 +4,41 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './index.scss';
 
-const ProductList = () => {
-  const [data, setData] = useState([]);
-  const [checked, setChecked] = useState([]);
-  const navigate = useNavigate();
+// delete checked boxes
+const handleClick = (e, checked, setChecked, data, setData, useNavigate) => {
+  e.preventDefault();
+  
+  axios.post('http://localhost/api/delete.php', checked).then(() => {
+    const newData = data.filter(product => !checked.includes(product.id));
+    setData(newData);
+    setChecked([]);
+  }).catch(error => {
+    console.log(error);
+  });
+  useNavigate('/');
+};
 
+
+const ProductList = () => {
+  const [checked, setChecked] = useState([]);
+  const [data, setData] = useState([]);
+  const navigate = useNavigate();
   const routeChange = () => {
     const path = '/add-product';
     navigate(path);
   };
-
   useEffect(() => {
-    axios.get('http://localhost/get.php', {
-      headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
+    axios.get('http://localhost/api/get.php').then(response => {
       setData(response.data);
     });
   }, [handleClick]);
-
-
-  const handleClick = () => {
-    axios.post('http://localhost/delete.php', checked).then(() => {
-      const newData = data.filter(product => !checked.includes(product.id));
-      setData(newData);
-      setChecked([]);
-    }).catch(error => {
-      console.log(error);
-    });
-  };
-
   return (
     <>
       <div className='title'>
         <h2>Product List</h2>
         <div className='buttons'>
           <button className='button' onClick={routeChange}>ADD</button>
-          <button className='button' onClick={handleClick}>MASS DELETE</button>
+          <button className='button' onClick={e => handleClick(e, checked, setChecked, data, setData, useNavigate)}>MASS DELETE</button>
         </div>
       </div>
       <div className='products'>

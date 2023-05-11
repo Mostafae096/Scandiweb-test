@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './box.scss'
 
 const attributes = (data) => {
+    // checking product type
     if (data['productType'] === 'DVD'){
         return 'Size: ' + data['size'] +' MB'
     } else if (data['productType'] === 'Book') {
@@ -14,11 +15,12 @@ const attributes = (data) => {
 
 
 const Box = ({data , setChecked}) => {
+    // handle checking
     const [isChecked, setIsChecked] = useState(false);
     const handleOnChange = () => {
         setIsChecked(!isChecked);
         setChecked(checked => [...checked, data['id']])
-      };
+    };
   return (
     <div className='box'>
         <input type="checkbox" className="delete-checkbox" checked={isChecked} onChange={handleOnChange}/>

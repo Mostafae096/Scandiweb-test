@@ -6,64 +6,56 @@ import './index.scss'
 
 
 const Addproduct = () => {
-    const [data, setData] = useState({
-        sku:'',
-        price: '',
-        name:'',
-        productType:'DVD',
-        size:'',
-        weight: '',
-        height: '',
-        width: '',
-        length: '',
-        
-    })
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setData({ ...data, [name]: value });
-      };
+  const [data, setData] = useState({
+      sku:'',
+      price: '',
+      name:'',
+      productType:'DVD',
+      size:'',
+      weight: '',
+      height: '',
+      width: '',
+      length: '',
       
-    let navigate = useNavigate(); 
-    const routeChange = () =>{ 
-      let path = `/`; 
-      navigate(path);
-    }
-    const handleSubmit = (e) =>{
-        e.preventDefault();
-        // console.log('test')
-        axios.get('http://localhost/get.php', {
-            headers: {
-              'Access-Control-Allow-Origin': 'http://localhost:3000/',
-              'Content-Type': 'application/json'
-            }
-          }).then(response => {
-            // handle the response data here
-            var getData = response.data
-            // console.log(getData)
-            let skuexist = true
-            getData.map(d => {
-                // console.log(d)
-                if(d['sku'] === data['sku']){
-                    // console.log(d['sku'], data['sku'])
-                    skuexist = true
-                    return console.log('sku is repeated')
-                }else{
-                    // console.log('sku is not repeated')
-                    skuexist = false
-                }
-                return skuexist
-            })
-            if(skuexist === false){
-                // console.log('added to database')
-                axios.post('http://localhost/post.php', JSON.stringify(data)).catch((error) => {
-                console.log(error);})
-            };
+  })
+  const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setData({ ...data, [name]: value });
+    };
+    
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    let path = `/`; 
+    navigate(path);
+  }
+  // handle submitting data
+  const handleSubmit = (e) =>{  
+    e.preventDefault();
+    // checking SKU
+    axios.get('http://localhost/api/get.php').then(response => {
+      var getData = response.data
+      let skuexist = false
+      getData.map(d => {
+        if(d['sku'] === data['sku']){
+            skuexist = true
+            return console.log('sku is repeated')
+        }else{
+            skuexist = false
+        }
+        return skuexist
+      })
+      // submitting data
+      if(skuexist === false){
+        console.log('added to database')
+        axios.post('http://localhost/api/post.php', JSON.stringify(data)).catch((error) => {
+        console.log(error);})
+      };
     })
-    }
+  }
     const form = {
-        'DVD' : <label>Size (MB):<input type="number"  name="size" id="size" value={data.size} onChange={handleInputChange} required/><p>Please, provide size</p></label>,
-        'Book': <label>Weight (KG):<input type="number" name="weight" id="weight" value={data.weight} onChange={handleInputChange} required /><p>Please, provide weight</p></label>,
-        'Furniture' : <><label>Height (CM):<input type="number" name="height" id="height" value={data.height} onChange={handleInputChange} required/></label><label>Width (CM):<input type="number" name="width" id="width" value={data.width} onChange={handleInputChange} required /></label><label>Length (CM):<input type="number" name="length" id="length" value={data.length} onChange={handleInputChange} required /></label><p>Please, provide dimensions</p></>,
+      'DVD' : <label>Size (MB):<input type="number"  name="size" id="size" value={data.size} onChange={handleInputChange} required/><p>Please, provide size</p></label>,
+      'Book': <label>Weight (KG):<input type="number" name="weight" id="weight" value={data.weight} onChange={handleInputChange} required /><p>Please, provide weight</p></label>,
+      'Furniture' : <><label>Height (CM):<input type="number" name="height" id="height" value={data.height} onChange={handleInputChange} required/></label><label>Width (CM):<input type="number" name="width" id="width" value={data.width} onChange={handleInputChange} required /></label><label>Length (CM):<input type="number" name="length" id="length" value={data.length} onChange={handleInputChange} required /></label><p>Please, provide dimensions</p></>,
     }
   return (
     <div>
